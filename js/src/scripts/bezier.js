@@ -76,7 +76,11 @@ class Bezier extends SvgChart {
       {
       margin: {top: 20, right: 20, bottom: 20, left: 20},
       initialWidth: 200,
-      initialHeight: 240
+      initialHeight: 200,
+			show_guides: true,
+			keep_tight: true,
+			x_scale: [0, 1],
+			y_scale: [0, 1]
       }
     );
   }
@@ -93,13 +97,15 @@ class Bezier extends SvgChart {
     super(selector, options);
 
     // Add custom variables
+		this.options = options;
+
     this.xScale = scaleLinear();
     this.yScale = scaleLinear();
     this.xAxis = axisBottom().scale(this.xScale);
     this.yAxis = axisLeft().scale(this.yScale);
     this.xAxisG = this.rootG.append('g');
     this.yAxisG = this.rootG.append('g');
-
+		
     // Add basic event listeners
     this.visualize = this.visualize.bind(this);
     this.on('resize.default', this.visualize);
@@ -115,10 +121,18 @@ class Bezier extends SvgChart {
 
     const data = this.data();
 
-    this.xScale.domain(extent(data.coords, d => d.x))
-      .range([0, this.getInnerWidth()]);
-    this.yScale.domain(extent(data.coords, d => d.y))
-      .range([this.getInnerHeight(), 0]);
+		let keep_tight = this.options.keep_tight;
+		if(keep_tight) {
+			this.xScale.domain(extent(data.coords, d => d.x))
+				.range([0, this.getInnerWidth()]);
+			this.yScale.domain(extent(data.coords, d => d.y))
+				.range([this.getInnerHeight(), 0]);
+		}	else {
+			this.xScale.domain(this.options.x_scale)
+				.range([0, this.getInnerWidth()]);
+			this.yScale.domain(this.options.y_scale)
+				.range([this.getInnerHeight(), 0]);
+		}
 
     this.xAxisG
       .attr('transform', `translate(0,${this.getInnerHeight()})`)
@@ -147,7 +161,19 @@ class Bezier extends SvgChart {
 		path.merge(pEnter)
 			.attr("d", (d) => getSvgPath(d, this.xScale, this.yScale));
 
-		
+		// better to do this after the path, so it displays on top of it and
+		// control points are actually clickeable everywhere
+		this.show_guides();	
+
+	}
+
+	show_guides() {
+
+		let thisInstance = this;
+
+		let show_guides = this.options.show_guides;
+		if(!show_guides) return;
+
 		// Guides
 		const g1 = this.rootG.selectAll('line.guide.from').data([data]);
 		const g2 = this.rootG.selectAll('line.guide.to').data([data]);
@@ -224,8 +250,6 @@ class Bezier extends SvgChart {
       .attr('cy', d => this.yScale(d.y))
 			.attr('r', 4);
   }
-
-
 
 }
 

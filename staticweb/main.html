@@ -63,24 +63,27 @@
 
       }
 
-
       // const bez = Bezier.Bezier();
       // bez.bark();
 
-      let bezzy = new Bezier.Bezier('#my-chart', 
-            {
-            margin: {top: 40, right: 40, bottom: 40, left: 40},
-            initialWidth: 400,
-            initialHeight: 480
-            }
-      );
+      let options = Bezier.Bezier.getDefaultOptions();
+      options.margin = {top: 40, right: 40, bottom: 40, left: 40};
+      options.initialWidth = 400;
+      options.initialHeight = 480;
+      options.show_guides = true;
+      options.keep_tight = false;
+      options.x_scale = [-10, 90];
+      options.y_scale = [-10, 110];
+
+
+      let bezzy = new Bezier.Bezier('#my-chart', options);
 
       let data = {
         coords: [
-          {x: 8.0, y:12.0},
-          {x: 3.0, y:5.0},
-          {x: 4, y: 20},
-          {x: 6, y: 10}]
+          {x: 0.0, y:12.0},
+          {x: 50.0, y:15.0},
+          {x: -5.0, y: 20},
+          {x: 70, y: 90}]
       };
 
       bezzy.data(data)
@@ -88,8 +91,11 @@
           .on('cpClick', d => { alert(JSON.stringify(d)); })
           // demonstrate auto resizing to maintain 16:9 aspect ratio
           .fit({
-            mode: 'aspectRatio',
-            ratio: 10/12,
+            // mode: 'aspectRatio',
+            // ratio: 10/12,
+            width: '100%',
+            //height: '200px'
+            height: '100%'
           }, true);
 
       function getData() {
