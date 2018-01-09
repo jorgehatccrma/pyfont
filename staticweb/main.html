@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Main</title>
+
+    <script type="text/javascript" src="/eel.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.12.2/d3.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3kit/3.2.0/d3kit.min.js"></script>
+
+    <script type="text/javascript" src="js/bezier.min.js"></script>
+
+
+
+    <style type="text/css" media="screen">
+      #d3-canvas {
+        border: 1px solid #0088bb;
+      }
+
+      path.bezier {
+          stroke: #333;
+          stroke-width: 3px;
+          fill: none;
+        }
+
+      circle.control-point {
+        fill: #cfcfcf;
+        stroke: #0088ff;
+        stroke-width: 1px;
+      }
+
+      line.guide {
+        stroke: #cfcfcf;
+        stroke-dasharray: 5 2;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <button onclick="testCall();">Click me</button>
+
+    <div id="my-chart"></div>
+
+<script type="text/javascript" charset="utf-8">
+
+      function testCall() {
+        console.log('Calling Python...');
+        let v1 = eel.my_python_function(1, 2)();   // This calls the Python function that was decorated:
+        let v2 = eel.my_python_function('jamon', 'queso')();
+
+        v1.then(function (result) {
+          console.log(result);
+        });
+
+        v2.then(function (result) {
+          console.log(result);
+        });
+
+      }
+
+
+      // const bez = Bezier.Bezier();
+      // bez.bark();
+
+      let bezzy = new Bezier.Bezier('#my-chart', 
+            {
+            margin: {top: 40, right: 40, bottom: 40, left: 40},
+            initialWidth: 400,
+            initialHeight: 480
+            }
+      );
+
+      let data = {
+        coords: [
+          {x: 8.0, y:12.0},
+          {x: 3.0, y:5.0},
+          {x: 4, y: 20},
+          {x: 6, y: 10}]
+      };
+
+      bezzy.data(data)
+          // handle bubbleClick event
+          .on('cpClick', d => { alert(JSON.stringify(d)); })
+          // demonstrate auto resizing to maintain 16:9 aspect ratio
+          .fit({
+            mode: 'aspectRatio',
+            ratio: 10/12,
+          }, true);
+
+    </script>
+  </body>
+</html>

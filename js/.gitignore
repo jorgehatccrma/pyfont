@@ -1,0 +1,4 @@
+# To keep dependencies in the repo, comment out next line (probably you
+# should read [this SO answer](https://stackoverflow.com/a/18131970/1620879)
+# before doing so)
+node_modules/*
