@@ -222,9 +222,7 @@ class Bezier extends SvgChart {
     selection.merge(sEnter)
       .attr('cx', d => this.xScale(d.x))
       .attr('cy', d => this.yScale(d.y))
-      // .attr('r', d => d.r)
-			.attr('r', 4)
-			.style('fill', (d,i) => this.color(i));
+			.attr('r', 4);
   }
 
 

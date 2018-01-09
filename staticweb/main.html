@@ -41,7 +41,8 @@
   </head>
   <body>
 
-    <button onclick="testCall();">Click me</button>
+    <button onclick="testCall();">Test python comm (see JS console)</button>
+    <button onclick="getData();">Click me</button>
 
     <div id="my-chart"></div>
 
@@ -90,6 +91,10 @@
             mode: 'aspectRatio',
             ratio: 10/12,
           }, true);
+
+      function getData() {
+        console.log(bezzy.data());
+      }
 
     </script>
   </body>
