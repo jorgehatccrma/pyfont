@@ -144,15 +144,24 @@ class Bezier extends SvgChart {
 
 		// Actual PATH (bezier curve)
 
-		const getSvgPath = function(data, xScale, yScale) {
-			const coords = data.coords.map(function(d) {
+		const getSvgPath = function(raw_coords, xScale, yScale) {
+			const coords = raw_coords.map(function(d) {
 				return {x:xScale(d.x), y:yScale(d.y)};
 			});
 			return bezierPathFromBezierObject(coords);
 		}
 
-		const path = this.rootG.selectAll('path.bezier').data(data);
+		const buildPaths = function(_data) {
+			let paths = [];
+			_data.paths.forEach(function(d) {
+				let tmp = _.map(d.coords, (dd) => _data.points[dd])
+				paths.push(tmp);
+			});
+			return paths;
+		}
 
+		const path = this.rootG.selectAll('path.bezier').data(buildPaths(data));
+		
 		path.exit().remove();
 
 		const pEnter = path.enter().append('path')
@@ -178,8 +187,8 @@ class Bezier extends SvgChart {
 		if(!show_guides) return;
 
 		// Guides
-		const g1 = this.rootG.selectAll('line.guide.from').data(data);
-		const g2 = this.rootG.selectAll('line.guide.to').data(data);
+		const g1 = this.rootG.selectAll('line.guide.from').data(data.paths);
+		const g2 = this.rootG.selectAll('line.guide.to').data(data.paths);
 
 		g1.exit().remove();
 		g2.exit().remove();
@@ -194,24 +203,25 @@ class Bezier extends SvgChart {
 			.classed('to', true);
 
 		g1.merge(g1Enter)
-		  .attr("x1", (d) => this.xScale(d.coords[0].x))
-		  .attr("y1", (d) => this.yScale(d.coords[0].y))
-		  .attr("x2", (d) => this.xScale(d.coords[1].x))
-		  .attr("y2", (d) => this.yScale(d.coords[1].y));
+		  .attr("x1", (d) => this.xScale(data.points[d.coords[0]].x))
+		  .attr("y1", (d) => this.yScale(data.points[d.coords[0]].y))
+		  .attr("x2", (d) => this.xScale(data.points[d.coords[1]].x))
+		  .attr("y2", (d) => this.yScale(data.points[d.coords[1]].y));
 		g2.merge(g2Enter)
-		  .attr("x1", (d) => this.xScale(d.coords[3].x))
-		  .attr("y1", (d) => this.yScale(d.coords[3].y))
-		  .attr("x2", (d) => this.xScale(d.coords[2].x))
-		  .attr("y2", (d) => this.yScale(d.coords[2].y));
+		  .attr("x1", (d) => this.xScale(data.points[d.coords[3]].x))
+		  .attr("y1", (d) => this.yScale(data.points[d.coords[3]].y))
+		  .attr("x2", (d) => this.xScale(data.points[d.coords[2]].x))
+		  .attr("y2", (d) => this.yScale(data.points[d.coords[2]].y));
 
 
 
 		// Add Control Points
 
     // const selection = this.rootG.selectAll('circle')
-    //   .data(data.coords);
+    //   .data(_.flattenDeep(_.map(data, (d) => d.coords)));
+
     const selection = this.rootG.selectAll('circle')
-      .data(_.flattenDeep(_.map(data, (d) => d.coords)));
+      .data(d3.values(data.points));
 
     selection.exit().remove();
 

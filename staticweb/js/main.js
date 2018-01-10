@@ -26,22 +26,25 @@ options.x_scale = [-10, 90];
 options.y_scale = [-10, 110];
 
 
-let data = [
-	{
-		id: 1,
-		coords: [
-			{x: 0.0, y: 12.0},
-			{x: 50.0, y: 15.0},
-			{x: 40.0, y: 82},
-			{x: 70, y: 90}]
-	}, {
-		id: 2,
-		coords: [
-			{x: 70.0, y: 90.0},
-			{x: 90.0, y: 95.0},
-			{x: 95.0, y: 30},
-			{x: 0, y: 8}]
-	}];
+let data = {
+	points: {
+		1: {x: 0.0, y: 12.0},
+		2: {x: 50.0, y: 15.0},
+		3: {x: 40.0, y: 82},
+		4: {x: 70, y: 90},
+		5: {x: 90.0, y: 95.0},
+		6: {x: 95.0, y: 30},
+		7: {x: 0, y: 8}
+	},
+	paths: [
+		{
+			id: 1,
+			coords: [1, 2, 3, 4]
+		}, {
+			id: 2,
+			coords: [4, 5, 6, 7]
+		}]
+};
 
 let bezzy = new Bezier.Bezier('#my-chart', options);
 
