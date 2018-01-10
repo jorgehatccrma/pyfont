@@ -151,11 +151,12 @@ class Bezier extends SvgChart {
 			return bezierPathFromBezierObject(coords);
 		}
 
-		const path = this.rootG.selectAll('path.bezier').data([data]);
+		const path = this.rootG.selectAll('path.bezier').data(data);
 
 		path.exit().remove();
 
 		const pEnter = path.enter().append('path')
+		  .attr('id', (d) => d.id)
 			.classed('bezier', true);
 			
 		path.merge(pEnter)
@@ -171,20 +172,24 @@ class Bezier extends SvgChart {
 
 		let thisInstance = this;
 
+    const data = this.data();
+
 		let show_guides = this.options.show_guides;
 		if(!show_guides) return;
 
 		// Guides
-		const g1 = this.rootG.selectAll('line.guide.from').data([data]);
-		const g2 = this.rootG.selectAll('line.guide.to').data([data]);
+		const g1 = this.rootG.selectAll('line.guide.from').data(data);
+		const g2 = this.rootG.selectAll('line.guide.to').data(data);
 
 		g1.exit().remove();
 		g2.exit().remove();
 
 		const g1Enter = g1.enter().append('line')
+		  .attr('id', (d) => 'gf' + d.id)
 			.classed('guide', true)
 			.classed('from', true);
 		const g2Enter = g1.enter().append('line')
+		  .attr('id', (d) => 'gt' + d.id)
 			.classed('guide', true)
 			.classed('to', true);
 
@@ -203,13 +208,14 @@ class Bezier extends SvgChart {
 
 		// Add Control Points
 
+    // const selection = this.rootG.selectAll('circle')
+    //   .data(data.coords);
     const selection = this.rootG.selectAll('circle')
-      .data(data.coords);
+      .data(_.flattenDeep(_.map(data, (d) => d.coords)));
 
     selection.exit().remove();
 
 		function started() {
-			console.log("drag start");
 			var circle = d3.select(this).classed("dragging", true);
 		}
 
