@@ -218,10 +218,14 @@ class Bezier extends SvgChart {
 		// Add Control Points
 
     // const selection = this.rootG.selectAll('circle')
-    //   .data(_.flattenDeep(_.map(data, (d) => d.coords)));
+    //   .data(d3.values(data.points));
 
     const selection = this.rootG.selectAll('circle')
-      .data(d3.values(data.points));
+      .data(_.map(d3.entries(data.points), function (d) {
+				let v = d.value;
+				v.id = d.key;
+				return v;
+			}));
 
     selection.exit().remove();
 
@@ -230,10 +234,24 @@ class Bezier extends SvgChart {
 		}
 
 		function dragged(d) {
+			let dx = thisInstance.xScale.invert(currentEvent.x) - d.x,
+				  dy = thisInstance.yScale.invert(currentEvent.y) - d.y;
+
 			var circle = d3.select(this);
 			circle.raise()
 				.attr("cx", d.x = thisInstance.xScale.invert(currentEvent.x))
 				.attr("cy", d.y = thisInstance.yScale.invert(currentEvent.y));
+
+			// Also move dependent points
+			if(currentEvent.sourceEvent.shiftKey) {
+				if(_.has(thisInstance.data().deps, d.id)) {
+					thisInstance.data().deps[d.id].forEach(function(dd) {
+						thisInstance.data().points[dd].x += dx;
+						thisInstance.data().points[dd].y += dy;
+					});
+				}
+			}
+
 			thisInstance.visualize();
 		}
 
@@ -244,6 +262,7 @@ class Bezier extends SvgChart {
 
     const sEnter = selection.enter().append('circle')
 		  .classed("control-point", true)
+		  .attr('id', d => "cp" + d.id)
       .attr('cx', d => this.xScale(d.x))
       .attr('cy', d => this.yScale(d.y))
 			.on('click', (...args) => {
