@@ -89,7 +89,7 @@ class Bezier extends SvgChart {
    * @return {Array[String]} event names
    */
   static getCustomEventNames() {
-    return ['cpClick'];
+    return ['cpClick', 'cpMoved'];
   }
 
 	constructor(selector, options) {
@@ -272,7 +272,7 @@ class Bezier extends SvgChart {
 					};
 				})
 				.on('start', started)
-				.on('drag', dragged)
+				.on('drag', d => { dragged(d); this.dispatcher.apply('cpMoved', this) })
 				.on('end', ended)
 			);
 

@@ -20,3 +20,12 @@ table.bezier {
   line-height: 50%;
   font-family: 'Ubuntu Mono', monospace;
 }
+
+table.bezier th {
+  text-align: center;
+}
+
+table.bezier td.x,
+table.bezier td.y {
+  text-align: right;
+}

@@ -44,10 +44,12 @@ let data = {
 };
 
 const bezzy = new Bezier.Bezier('#my-chart', options);
+const bezzy_table = new Bezier.BezierTable('#my-table', table_options);
 
 bezzy.data(data)
 // handle bubbleClick event
 	.on('cpClick', d => { alert(JSON.stringify(d)); })
+	.on('cpMoved', d => bezzy_table.data(bezzy.data()) )
 	.fit({
 		// mode: 'aspectRatio',
 		// ratio: 10/12,
@@ -56,7 +58,6 @@ bezzy.data(data)
 		//height: '200px'
 	}, true);
 
-const bezzy_table = new Bezier.BezierTable('#my-table', table_options);
 bezzy_table.data(bezzy.data());
 	// .fit({
 	//   width: '100%',
@@ -85,8 +86,7 @@ function testCall() {
 	});
 }
 
-function updateData() {
-	// bezzy_table.data([]);
+function updateTable() {
 	const d = bezzy.data();
 	bezzy_table.data(d);
 }

@@ -23,7 +23,10 @@ class BezierTable extends AbstractChart {
     return helper.deepExtend(
       super.getDefaultOptions(),
       {
-				columns: ['id', 'x', 'y']
+				columns: [
+					{name: 'id', styles: [], num_dec: null},
+					{name: 'x', styles: [], num_dec: 2},
+					{name: 'y', styles: [], num_dec: 2}]
       }
     );
   }
@@ -62,7 +65,9 @@ class BezierTable extends AbstractChart {
 		this.tbody = table.append('tbody');
 
 		this.thead.selectAll('th').data(this.options.columns).enter()
-			.append('th').text(col => col);
+			.append('th')
+			.attr('class', col => col.name)
+			.text(col => col.name);
 
 		this.updateDimensionNow();
   }
@@ -90,16 +95,21 @@ class BezierTable extends AbstractChart {
     let cells = rows.selectAll("td")
         .data(function(row) {
             return opts.columns.map(function(column) {
-                return {column: column, value: row[column]};
+                return {column: column, value: row[column.name]};
             });
         });
 
     const cellEnter = cells.enter()
         .append("td")
-		    .attr('class', d => d.column);
+		    .attr('class', d => d.column.name);
 
 		cells.merge(cellEnter)
-				.text(function(d) { return d.value; });
+				.text(function(d) { 
+					if (d.column.num_dec) {
+						return Number.parseFloat(d.value).toFixed(d.column.num_dec);
+					}
+					return d.value; 
+				});
 
 	}
 
