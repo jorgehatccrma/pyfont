@@ -23,15 +23,7 @@ class BezierTable extends AbstractChart {
     return helper.deepExtend(
       super.getDefaultOptions(),
       {
-      margin: {top: 20, right: 20, bottom: 20, left: 20},
-      initialWidth: 200,
-      initialHeight: 200,
-      width: 200,
-      height: 200,
-			show_guides: true,
-			keep_tight: true,
-			x_scale: [0, 1],
-			y_scale: [0, 1]
+				columns: ['id', 'x', 'y']
       }
     );
   }
@@ -59,18 +51,18 @@ class BezierTable extends AbstractChart {
     this.on('resize.default', this.visualize);
     this.on('data.default', this.visualize);
 
-		let table = this.plates.main_table.getSelection()
+		const table = this.plates.main_table.getSelection()
 			.append('table')
 		  .classed('pure-table', true)
 		  .classed('pure-table-horizontal', true)
 			.classed('bezier', true);
+		this.table = table;
 
-		const header = table.append('thead').append('tr');
-		header.append('th').html('id');
-		header.append('th').html('x');
-		header.append('th').html('y');
+		this.thead = table.append('thead');
+		this.tbody = table.append('tbody');
 
-		this.table = table.append('tbody');
+		this.thead.selectAll('th').data(this.options.columns).enter()
+			.append('th').text(col => col);
 
 		this.updateDimensionNow();
   }
@@ -84,23 +76,31 @@ class BezierTable extends AbstractChart {
 
     const data = this.data();
 		console.log(data.points);
+		const opts = this.options;
 
-		const table = this.table.selectAll('tr.datapoint')
-			.data(Object.values(data.points));
+		// create a row for each object in the data
+    let rows = this.tbody.selectAll("tr.datapoint")
+        .data(Object.values(data.points));
 
-		table.exit().remove();
+    let rowEnter = rows.enter()
+        .append("tr")
+				.classed('datapoint', true);
 
-		const rowEnter = table.enter()
-			.append('tr')
-			.classed('datapoint', true);
+    // create a cell in each row for each column
+    let cells = rows.selectAll("td")
+        .data(function(row) {
+            return opts.columns.map(function(column) {
+                return {column: column, value: row[column]};
+            });
+        });
 
-		const idEnter = rowEnter.append('td').classed('id', true);
-		const xEnter = rowEnter.append('td').classed('x', true);
-		const yEnter = rowEnter.append('td').classed('y', true);
+    const cellEnter = cells.enter()
+        .append("td")
+		    .attr('class', d => d.column);
 
-		table.merge(idEnter).html(d => d.id);
-		table.merge(xEnter).html(d => d.x);
-		table.merge(yEnter).html(d => d.y);
+		cells.merge(cellEnter)
+				.text(function(d) { return d.value; });
+
 	}
 
 }

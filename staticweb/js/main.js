@@ -11,8 +11,8 @@ options.x_scale = [-10, 90];
 options.y_scale = [-10, 110];
 
 
-// const table_options = Bezier.BezierTable.getDefaultOptions();
-const table_options = {};
+const table_options = Bezier.BezierTable.getDefaultOptions();
+// const table_options = {};
 
 let data = {
 	points: {
@@ -62,6 +62,7 @@ bezzy_table.data(bezzy.data());
 	//   width: '100%',
 	//   height: '200px'
 	// }, true);
+bezzy_table.visualize();  // why is this necessary?
 
 function getData() {
 	const d = bezzy.data();
@@ -82,4 +83,10 @@ function testCall() {
 	v2.then(function (result) {
 		console.log(result);
 	});
+}
+
+function updateData() {
+	// bezzy_table.data([]);
+	const d = bezzy.data();
+	bezzy_table.data(d);
 }
