@@ -1,18 +1,3 @@
-function testCall() {
-	console.log('Calling Python...');
-	let v1 = eel.my_python_function(1, 2)();   // This calls the Python function that was decorated:
-	let v2 = eel.my_python_function('jamon', 'queso')();
-
-	v1.then(function (result) {
-		console.log(result);
-	});
-
-	v2.then(function (result) {
-		console.log(result);
-	});
-
-}
-
 // const bez = Bezier.Bezier();
 // bez.bark();
 
@@ -25,6 +10,9 @@ options.keep_tight = false;
 options.x_scale = [-10, 90];
 options.y_scale = [-10, 110];
 
+
+// const table_options = Bezier.BezierTable.getDefaultOptions();
+const table_options = {};
 
 let data = {
 	points: {
@@ -46,12 +34,16 @@ let data = {
 		}],
 	deps: {
 		1: [2],
+		2: [1],
+		3: [4],
 		4: [3, 5],
+		5: [4],
+		6: [7],
 		7: [6]
 	}
 };
 
-let bezzy = new Bezier.Bezier('#my-chart', options);
+const bezzy = new Bezier.Bezier('#my-chart', options);
 
 bezzy.data(data)
 // handle bubbleClick event
@@ -64,6 +56,30 @@ bezzy.data(data)
 		//height: '200px'
 	}, true);
 
+const bezzy_table = new Bezier.BezierTable('#my-table', table_options);
+bezzy_table.data(bezzy.data());
+	// .fit({
+	//   width: '100%',
+	//   height: '200px'
+	// }, true);
+
 function getData() {
-	console.log(bezzy.data());
+	const d = bezzy.data();
+	console.log(d);
+	alert(JSON.stringify(d));
+}
+
+
+function testCall() {
+	console.log('Calling Python...');
+	let v1 = eel.my_python_function(1, 2)();   // This calls the Python function that was decorated:
+	let v2 = eel.my_python_function('jamon', 'queso')();
+
+	v1.then(function (result) {
+		console.log(result);
+	});
+
+	v2.then(function (result) {
+		console.log(result);
+	});
 }

@@ -2,7 +2,8 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Main</title>
 
     <script type="text/javascript" src="/eel.js"></script>
@@ -13,37 +14,29 @@
 
     <script type="text/javascript" src="js/bezier.min.js"></script>
 
-    <style type="text/css" media="screen">
-      #d3-canvas {
-        border: 1px solid #0088bb;
-      }
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
 
-      path.bezier {
-          stroke: #333;
-          stroke-width: 3px;
-          fill: none;
-        }
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="css/bezier.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
-      circle.control-point {
-        fill: #cfcfcf;
-        stroke: #0088ff;
-        stroke-width: 1px;
-      }
 
-      line.guide {
-        stroke: #cfcfcf;
-        stroke-dasharray: 5 2;
-      }
-
-    </style>
+    <!-- Google Web Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <!-- END OF Google Web Fonts -->
 
   </head>
   <body>
 
     <button onclick="testCall();">Test python comm (see JS console)</button>
-    <button onclick="getData();">Click me</button>
+    <button onclick="getData();">Show data</button>
 
-    <div id="my-chart"></div>
+
+    <div id="my-chart"> </div>
+
+    <p>Hold the <code>SHIFT</code> key to move all related points as a block. </p>
+
+    <div id="my-table"> </div>
 
     <!-- GO -->
     <script type="text/javascript" src="js/main.js"> </script>

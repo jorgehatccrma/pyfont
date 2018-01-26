@@ -1,0 +1,22 @@
+path.bezier {
+  stroke: #333;
+  stroke-width: 3px;
+  fill: none;
+}
+
+circle.control-point {
+  fill: #cfcfcf;
+  stroke: #0088ff;
+  stroke-width: 1px;
+}
+
+line.guide {
+  stroke: #cfcfcf;
+  stroke-dasharray: 5 2;
+}
+
+table.bezier {
+  /* line-height: normal; */
+  line-height: 50%;
+  font-family: 'Ubuntu Mono', monospace;
+}

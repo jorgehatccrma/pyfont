@@ -19,7 +19,6 @@ function Dummy() {
 
 }
 
-
 import { AbstractChart, CanvasPlate, SvgPlate } from 'd3kit';
 import { SvgChart, helper } from 'd3kit';
 import { scaleLinear, scaleOrdinal } from 'd3-scale';
@@ -216,9 +215,6 @@ class Bezier extends SvgChart {
 
 
 		// Add Control Points
-
-    // const selection = this.rootG.selectAll('circle')
-    //   .data(d3.values(data.points));
 
     const selection = this.rootG.selectAll('circle')
       .data(_.map(d3.entries(data.points), function (d) {

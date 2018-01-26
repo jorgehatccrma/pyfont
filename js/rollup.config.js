@@ -1,8 +1,10 @@
 import commonjs from 'rollup-plugin-commonjs';
+import multiEntry from 'rollup-plugin-multi-entry';
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
-  input : 'src/scripts/bezier.js',
+  // input : 'src/scripts/bezier.js',
+  input : 'src/scripts/**/*.js',
   output : {
     file : '../staticweb/js/bezier.min.js',
     format : 'iife',
@@ -22,10 +24,12 @@ export default {
 					'AbstractChart',
 					'CanvasPlate',
 					'SvgPlate',
-					'SvgChart', 
+					'SvgChart',
+					'DivPlate',
 					'helper'
 				]
       }
-    })
+    }),
+		multiEntry()
   ]
 };
